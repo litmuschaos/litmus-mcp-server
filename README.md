@@ -53,7 +53,7 @@ A comprehensive Model Context Protocol (MCP) server for LitmusChaos 3.x, built i
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/litmuschaos-mcp-server.git
+git clone https://github.com/litmuschaos/litmus-mcp-server.git
 cd litmuschaos-mcp-server
 
 # Build the binary
@@ -66,7 +66,7 @@ make install
 ### Using Go Install
 
 ```bash
-go install github.com/yourusername/litmuschaos-mcp-server@latest
+go install github.com/litmuschaos/litmus-mcp-server@latest
 ```
 
 ### Using Docker
@@ -141,7 +141,7 @@ make run
 
 ```bash
 # Clone and setup
-git clone https://github.com/yourusername/litmuschaos-mcp-server.git
+git clone https://github.com/litmuschaos/litmus-mcp-server.git
 cd litmuschaos-mcp-server
 
 # Install dependencies
