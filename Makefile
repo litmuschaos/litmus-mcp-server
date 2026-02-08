@@ -1,5 +1,4 @@
-# TODO: Add into Github Workflow
-.PHONY: build clean run test lint fmt vet install dev help
+.PHONY: build build-release clean run dev test test-coverage lint fmt-check fmt vet tidy install docker-build docker-run deps verify check release help build-linux build-darwin build-windows build-all
 
 # Default target
 .DEFAULT_GOAL := build
@@ -74,12 +73,12 @@ test-coverage:
 ## lint: Run linter
 lint:
 	@echo "Running linter..."
-	@if command -v golangci-lint > /dev/null; then \
-		golangci-lint run; \
-	else \
-		echo "golangci-lint not found. Install with:"; \
-		echo "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; \
-	fi
+	@go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run
+
+## fmt-check: Check code formatting
+fmt-check:
+	@echo "Checking code formatting..."
+	@$(GOFMT) -l .
 
 ## fmt: Format code
 fmt:
@@ -131,8 +130,8 @@ verify:
 	$(GOMOD) verify
 	@echo "Dependencies verified"
 
-## check: Run all checks (fmt, vet, lint, test)
-check: fmt vet lint test
+## check: Run all checks (fmt-check, vet, lint, test)
+check: fmt-check vet lint test
 	@echo "All checks passed"
 
 ## release: Prepare release build
