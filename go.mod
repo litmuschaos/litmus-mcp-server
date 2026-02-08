@@ -1,4 +1,4 @@
-module litmuschaos-mcp-server
+module github.com/litmuschaos/litmus-mcp-server
 
 go 1.21
 
