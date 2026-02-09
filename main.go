@@ -550,8 +550,8 @@ func (s *LitmusChaosServer) handleRequest(ctx context.Context, req *MCPRequest) 
 	switch req.Method {
 	case "initialize":
 		resp.Result = s.handleInitialize()
-	case "initialized":
-		// No-op for initialized notification
+	case "notifications/initialized", "initialized":
+		// Notification - no response should be sent
 		return nil
 	case "tools/list":
 		resp.Result = s.handleListTools()
@@ -566,6 +566,10 @@ func (s *LitmusChaosServer) handleRequest(ctx context.Context, req *MCPRequest) 
 			resp.Result = result
 		}
 	default:
+		// If the method starts with "notifications/", it's a notification - ignore it
+		if strings.HasPrefix(req.Method, "notifications/") {
+			return nil
+		}
 		resp.Error = &MCPError{
 			Code:    -32601,
 			Message: fmt.Sprintf("Method not found: %s", req.Method),
@@ -594,7 +598,9 @@ func (s *LitmusChaosServer) run() error {
 		ctx := context.Background()
 		resp := s.handleRequest(ctx, &req)
 		
-		if resp != nil {
+		// Only send response for requests (messages with an id).
+		// Notifications (no id) must never receive a response per JSON-RPC 2.0 spec.
+		if resp != nil && req.ID != nil {
 			respJSON, err := json.Marshal(resp)
 			if err != nil {
 				log.Printf("Failed to marshal response: %v", err)
